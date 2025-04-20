@@ -1,4 +1,6 @@
-
+# Introduction
+* Keyword: Mamba-VaDE, Clustering, EEG, Sleep-Stage
+# Install
 ```
 docker pull ubuntu:22.04
 docker run -itd --gpus=all --shm-size --name <container_name> ubuntu:22.04
@@ -12,3 +14,6 @@ sudo apt-get install wget
 wget -r -N -c -np https://physionet.org/files/siena-scalp-eeg/1.0.0/ -P data/
 
 ```
+
+# References
+VaDE Repository: https://github.com/mori97/VaDE/blob/master/vade.py
