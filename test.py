@@ -1,7 +1,9 @@
 import mne
 import matplotlib as plt
 
-root = "data/physionet.org/files/sleep-edf/1.0.0/sc4002e0.edf"
+root = "data/open-nuro-dataset/dataset/sub-001/eeg/sub-001_task-eyesclosed_eeg.set"
 
-raw = mne.io.read_raw_edf(root, preload=True, verbose=False)
+raw = mne.io.read_raw_eeglab(root, preload=True, verbose=False)
 print(raw.info['ch_names'])
+
+print(raw)
