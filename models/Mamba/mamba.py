@@ -55,10 +55,10 @@ class Mamba(nn.Module):
 
         self.lm_head = nn.Linear(d_model, out_dim, bias=False)
 
-    def forward(self, input_ids):
+    def forward(self, x):
         """
         Args:
-            input_ids (long tensor): shape (b, l)    (See Glossary at top for definitions of b, l, d_in, n...)
+            x (float tensor): shape (b, l, dim)    (See Glossary at top for definitions of b, l, d_in, n...)
     
         Returns:
             logits: shape (b, l, vocab_size)
