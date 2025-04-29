@@ -12,14 +12,6 @@ class Transformer(nn.Module):
                  attn_heads:int = 2,
                  out_dim:int = 32,
                  device:str = 'cuda'):
-        '''
-            1. sequence : 128 dim으로 linear
-            2. Add Sinusoidal Positional Embedding
-            3. Transformer encoder layer: 2개, attn_heads: 2
-            4. Output sequence GAP
-            5. 128 dim에 대해 Linear -> label 수만큼
-            6. Cross entropy(Softmax) -> engine.py에서 수행
-        '''
         super().__init__()
         
         self.li = nn.Linear(in_features, d_model)
