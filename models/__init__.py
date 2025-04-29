@@ -1,4 +1,5 @@
 from .Mamba.mamba import Mamba
+from .Transformer.transformer import Transformer
 
 def load_model(cfg):
     #if cfg['name'] == 'VAE':
@@ -6,3 +7,6 @@ def load_model(cfg):
     
     if cfg['name'] == 'Mamba':
         return Mamba.from_config(cfg)
+    
+    elif cfg['name'] == 'Transformer':
+        return Transformer.from_config(cfg)

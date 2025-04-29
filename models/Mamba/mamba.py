@@ -29,9 +29,11 @@ from typing import Union
 
 from .rms_norm import RMSNorm
 from .residual_block import ResidualBlock
+from .pos_embedding import SinusoidalPosEmbedding
 
 class Mamba(nn.Module):
     def __init__(self,
+                 in_features: int,
                  d_model: int,
                  n_layer: int,
                  d_inner: int,
@@ -41,8 +43,14 @@ class Mamba(nn.Module):
                  d_conv: int = 4 ,
                  conv_bias: bool = True,
                  bias: bool = False,
-                 out_dim: int = 128,):
+                 out_dim: int = 128,
+                 device: str = 'cuda'):
         super().__init__()
+        
+        self.li = nn.Linear(in_features, d_model)
+        self.relu = nn.ReLU()
+        
+        self.pos_emb = SinusoidalPosEmbedding(dim=d_model)
         
         self.layers = nn.ModuleList([ResidualBlock(d_model,
                                                    d_inner,
@@ -54,6 +62,8 @@ class Mamba(nn.Module):
         self.norm_f = RMSNorm(d_model)
 
         self.lm_head = nn.Linear(d_model, out_dim, bias=False)
+        
+        self.device = device
 
     def forward(self, x):
         """
@@ -67,6 +77,15 @@ class Mamba(nn.Module):
             class MambaLMHeadModel, https://github.com/state-spaces/mamba/blob/main/mamba_ssm/models/mixer_seq_simple.py#L173
 
         """
+        B, L, D = x.size() # Batch, Sequence Length, Dimension
+        
+        x = self.relu(self.li(x))
+        
+        timesteps = torch.arange(0, L, 1)
+        pos_emb = self.pos_emb(timesteps).to(self.device)
+        
+        x = x + pos_emb
+        
         for layer in self.layers:
             x = layer(x)
             
@@ -82,7 +101,8 @@ class Mamba(nn.Module):
             
         d_inner = int(cfg['expand'] * cfg['d_model'])
         
-        return cls(d_model=cfg['d_model'],
+        return cls(in_features=cfg['in_features'],
+                   d_model=cfg['d_model'],
                    n_layer=cfg['n_layer'],
                    d_inner=d_inner,
                    d_state=cfg['d_state'],
@@ -91,4 +111,5 @@ class Mamba(nn.Module):
                    d_conv=cfg['d_conv'],
                    conv_bias=cfg['conv_bias'],
                    bias=cfg['bias'],
-                   out_dim=cfg['out_dim'])
+                   out_dim=cfg['out_dim'],
+                   device=cfg['device'])
