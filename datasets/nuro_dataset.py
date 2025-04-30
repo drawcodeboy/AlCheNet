@@ -1,7 +1,9 @@
+import torch
 from torch.utils.data import Dataset
 import pandas as pd
 import numpy as np
 import mne
+from einops import rearrange
 
 import os
 import time
@@ -49,9 +51,11 @@ class NuroDataset(Dataset):
     
     def __getitem__(self, idx):
         sample_path, label = self.data_li[idx]
-        sample = np.load(sample_path)
+        sample = np.load(sample_path).astype(np.float32)
         
         # NEED PRE-PROCESSING
+        sample = torch.tensor(sample)
+        sample = rearrange(sample, 'C L -> L C') # C = Channels, L = Length
         
         return sample, label
         

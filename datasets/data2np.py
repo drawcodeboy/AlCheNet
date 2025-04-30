@@ -10,7 +10,7 @@ def main():
     save_path = f"{root}/np-format"
     os.makedirs(save_path, exist_ok=True)
     
-    seconds = 10 # Choose data length
+    seconds = 2 # Choose data length
     fs = 500
     length = fs * seconds
     
