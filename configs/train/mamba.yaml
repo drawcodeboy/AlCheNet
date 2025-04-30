@@ -1,0 +1,38 @@
+expr: Train Mamba Classifier
+
+device: &device cuda:1
+
+parallel: False
+
+train_data:
+  name: Nuro
+  root: data/open-nuro-dataset/dataset
+  mode: train
+
+val_data:
+  name: Nuro
+  root: data/open-nuro-dataset/dataset
+  mode: val
+
+model:
+  name: MambaClassifier
+  in_features: 19
+  d_model: 128
+  n_layer: 6
+  d_state: 16
+  expand: 2
+  dt_rank: auto
+  d_conv: 4
+  conv_bias: True
+  bias: False
+  out_dim: 128
+  mid_features: 50
+  class_num: 3
+  device: *device
+
+hyperparameters:
+  batch_size: 16
+  loss_fn: cross-entropy
+  optim: AdamW
+  lr: 0.0001
+  epochs: 100
