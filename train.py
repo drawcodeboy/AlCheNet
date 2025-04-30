@@ -1,7 +1,7 @@
 from datasets import load_dataset
 from models import load_model
 
-from utils import train_one_epoch, save_model_ckpt, save_loss_ckpt
+from utils import train_one_epoch, validate, save_model_ckpt, save_loss_ckpt
 
 import torch
 from torch import nn, optim
@@ -29,18 +29,27 @@ def main(cfg):
     hp_cfg = cfg['hyperparameters']
 
     # Load Dataset
-    data_cfg = cfg['data']
-    train_ds = load_dataset(data_cfg)
+    train_data_cfg = cfg['train_data']
+    train_ds = load_dataset(train_data_cfg)
     train_dl = torch.utils.data.DataLoader(train_ds,
                                            shuffle=True,
                                            batch_size=hp_cfg['batch_size'],
                                            drop_last=True)
-    print(f"Load Dataset {data_cfg['dataset']}")
+    print(f"Load Dataset {train_data_cfg['name']}")
+    
+    val_data_cfg = cfg['val_data']
+    val_ds = load_dataset(val_data_cfg)
+    val_dl = torch.utils.data.DataLoader(val_ds,
+                                         shuffle=False,
+                                         batch_size=hp_cfg['batch_size'],
+                                         drop_last=False)
+    print(f"Load Dataset {val_data_cfg['name']}")
             
     # Load Model
     model_cfg = cfg['model']
     print(model_cfg['name'])
     model = load_model(model_cfg).to(device)
+    
     if cfg['parallel'] == True:
         model = nn.DataParallel(model)
     
@@ -78,8 +87,10 @@ def main(cfg):
         elapsed_time = int(time.time() - start_time)
         print(f"Train Time: {elapsed_time//60:02d}m {elapsed_time%60:02d}s\n")
 
-        if train_loss < min_loss:
-            min_loss = train_loss
+        val_loss = validate(model, val_dl, loss_fn, scheduler, device) # input args
+
+        if val_loss < min_loss:
+            min_loss = val_loss
             save_model_ckpt(model, cfg['save_name'], current_epoch, cfg['save_dir'])
 
         total_train_loss.append(train_loss)

@@ -19,7 +19,7 @@ def main():
         'conv_bias': True,
         'bias': False,
         'out_dim': 128,
-        'device': 'cuda'
+        'device': 'cuda:2'
     }
     model = load_model(cfg).to(cfg['device'])
     
@@ -39,7 +39,7 @@ def main():
         'n_layer': 6,
         'attn_heads': 1,
         'out_dim': 128,
-        'device': 'cuda'
+        'device': 'cuda:2'
     }
     model = load_model(cfg).to(cfg['device'])
     
@@ -66,7 +66,7 @@ def main():
         'out_dim': 128,
         'mid_features': 50,
         'class_num': 3,
-        'device': 'cuda'
+        'device': 'cuda:2'
     }
     model = load_model(cfg).to(cfg['device'])
     
@@ -88,7 +88,7 @@ def main():
         'out_dim': 128,
         'mid_features': 50,
         'class_num': 3,
-        'device': 'cuda'
+        'device': 'cuda:2'
     }
     model = load_model(cfg).to(cfg['device'])
     

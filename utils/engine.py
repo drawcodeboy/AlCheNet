@@ -30,11 +30,24 @@ def train_one_epoch(model, dataloader, loss_fn, optimizer, scheduler, device):
     return sum(total_loss)/len(total_loss)
 
 @torch.no_grad()
-def validate(model, dataloader, device):
+def validate(model, dataloader, loss_fn, scheduler, device):
     model.eval()
     total_loss = []
     
+    for batch_idx, (x, target) in enumerate(dataloader, start=1):
+        x = x.to(device)
+        target = target.to(device)
+        
+        logits = model(x)
+        loss = loss_fn(logits, target)
+        
+        total_loss.append(loss.item())
+                
+        print(f"\rValidate: {100*batch_idx/len(dataloader):.2f}%, Loss: {sum(total_loss)/len(total_loss):.6f}", end="")
+    
     scheduler.step(sum(total_loss)/len(total_loss))
+    
+    return sum(total_loss)/len(total_loss)
 
 @torch.no_grad()
 def evaluate(model, dataloader, device):
