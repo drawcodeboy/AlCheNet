@@ -1,6 +1,8 @@
 import torch
 from torch import nn
 
+from einops import rearrange
+
 class RMSNorm(nn.Module):
     def __init__(self,
                  d_model: int,
@@ -31,12 +33,14 @@ class MLP(nn.Module):
         # x shape: (B, L, D)
         
         x = self.norm1(x)
-        
+
         # Global Average Pooling
+        # print(x.shape)
         x = torch.mean(x, dim=1)
-        
+
         # MLP
         x = self.l1(x)
+
         x = self.l2(self.norm2(x))
         
         return x

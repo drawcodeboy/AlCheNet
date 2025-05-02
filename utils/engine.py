@@ -16,6 +16,7 @@ def train_one_epoch(model, dataloader, loss_fn, optimizer, scheduler, device):
         target = target.to(device)
         
         logits = model(x)
+        # print(logits.shape, target.shape)
         loss = loss_fn(logits, target)
         
         total_loss.append(loss.item())
@@ -25,7 +26,6 @@ def train_one_epoch(model, dataloader, loss_fn, optimizer, scheduler, device):
         
         print(f"\rTraining: {100*batch_idx/len(dataloader):.2f}%, Loss: {sum(total_loss)/len(total_loss):.6f}, LR: {scheduler.get_last_lr()[0]:.6f}", end="")
     print()
-    
     
     return sum(total_loss)/len(total_loss)
 
@@ -44,6 +44,7 @@ def validate(model, dataloader, loss_fn, scheduler, device):
         total_loss.append(loss.item())
                 
         print(f"\rValidate: {100*batch_idx/len(dataloader):.2f}%, Loss: {sum(total_loss)/len(total_loss):.6f}", end="")
+    print()
     
     scheduler.step(sum(total_loss)/len(total_loss))
     

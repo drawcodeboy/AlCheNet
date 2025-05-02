@@ -1,18 +1,13 @@
-expr: Train Transformer Classifier
+expr: Test Transformer Classifier
 
 device: &device cuda:2
 
 parallel: False
 
-train_data:
+data:
   name: Nuro
   root: data/open-nuro-dataset/dataset
-  mode: train
-
-val_data:
-  name: Nuro
-  root: data/open-nuro-dataset/dataset
-  mode: val
+  mode: test
 
 model:
   name: TransformerClassifier
@@ -32,5 +27,5 @@ hyperparameters:
   lr: 0.0001
   epochs: 100
 
-save_name: Transformer
 save_dir: saved
+weights_file_name: Transformer.epochs_006.pth

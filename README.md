@@ -15,6 +15,3 @@ sudo apt-get install unzip
 curl -L -o ./data/open-nuro-dataset.zip https://www.kaggle.com/api/v1/datasets/download/yosftag/open-nuro-dataset
 unzip data/open-nuro-dataset.zip -d data/open-nuro-dataset
 ```
-
-# References
-VaDE Repository: https://github.com/mori97/VaDE/blob/master/vade.py

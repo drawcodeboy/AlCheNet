@@ -32,7 +32,7 @@ def main(cfg):
     test_ds = load_dataset(data_cfg)
     test_dl = torch.utils.data.DataLoader(test_ds,
                                           batch_size=hp_cfg['batch_size'])
-    print(f"Load Dataset {data_cfg['dataset']}")
+    print(f"Load Dataset {data_cfg['name']}")
     
     # Load Model
     model_cfg = cfg['model']
