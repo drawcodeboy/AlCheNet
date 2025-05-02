@@ -57,6 +57,8 @@ class NuroDataset(Dataset):
         sample = torch.tensor(sample)
         sample = rearrange(sample, 'C L -> L C') # C = Channels, L = Length
         
+        label = torch.tensor(label, dtype=torch.int64)
+        
         return sample, label
         
     def _check(self):
