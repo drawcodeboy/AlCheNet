@@ -4,8 +4,11 @@ import pandas as pd
 import numpy as np
 import mne
 from einops import rearrange
+from scipy.signal import welch
+from torch_geometric.utils import dense_to_sparse
+from .eeg_func.band_decom import decompose_eeg_waves
 
-import os
+import os, sys
 import time
 import random
 
@@ -50,16 +53,21 @@ class NuroDataset(Dataset):
         return len(self.data_li)
     
     def __getitem__(self, idx):
-        sample_path, label = self.data_li[idx]
-        sample = np.load(sample_path).astype(np.float32)
+        freq_path, adj_path, label = self.data_li[idx]
+        freq = np.load(freq_path).astype(np.float32)
+        adj = np.load(adj_path).astype(np.float32)
+        adj = torch.tensor(adj, dtype=torch.float32)
         
-        # NEED PRE-PROCESSING
-        sample = torch.tensor(sample)
-        sample = rearrange(sample, 'C L -> L C') # C = Channels, L = Length
+        edge_index, edge_weight = dense_to_sparse(adj)
         
+        freq = torch.tensor(freq, dtype=torch.float32)
         label = torch.tensor(label, dtype=torch.int64)
         
-        return sample, label
+        x = {'freq': freq,
+             'edge_index': edge_index,
+             'edge_weight': edge_weight}
+        
+        return x, label
         
     def _check(self):
         participants_li = self.metadata['participant_id'].tolist()
@@ -72,12 +80,16 @@ class NuroDataset(Dataset):
                 if participant_id not in self.test_li: continue
             
             participant_path = f"{np_root}/{participant_id}"
-            for sample_path in sorted(os.listdir(participant_path)):
-                sample_path = f"{participant_path}/{sample_path}"
+            for freq_path in sorted(os.listdir(participant_path)):
+                if freq_path[:4] != "freq":
+                    continue
+                adj_path = freq_path.replace('freq', 'adj')
+                freq_path = f"{participant_path}/{freq_path}"
+                adj_path = f"{participant_path}/{adj_path}"
                 label = self.metadata[self.metadata['participant_id'] == participant_id]['Group'].values.item()
                 label = self.label_map[label]
                 
-                self.data_li.append([sample_path, label])
+                self.data_li.append([freq_path, adj_path, label])
                 
     @classmethod
     def from_config(cls, cfg):
