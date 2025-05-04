@@ -1,4 +1,4 @@
-expr: Train Transformer Classifier
+expr: Train ConvNet
 
 device: &device cuda:2
 
@@ -15,15 +15,14 @@ val_data:
   mode: val
 
 model:
-  name: TransformerClassifier
-  in_features: 19
-  d_model: 128
-  n_layer: 6
-  attn_heads: 2
-  out_dim: 128
-  mid_features: 50
+  name: ConvNet
+  channels: 19
+  window_size: 5
+  seq_len: 51
+  node_dim: 128
+  mlp_mode: conv_cls
+  mlp_hidden_features: 64
   class_num: 3
-  device: *device
 
 hyperparameters:
   batch_size: 16
@@ -32,5 +31,7 @@ hyperparameters:
   lr: 0.0001
   epochs: 100
 
-save_name: Transformer
+task: freq
+
+save_name: ConvNet
 save_dir: saved

@@ -10,13 +10,13 @@ data:
   mode: test
 
 model:
-  name: TransformerClassifier
-  in_features: 19
-  d_model: 128
-  n_layer: 6
-  attn_heads: 2
-  out_dim: 128
-  mid_features: 50
+  name: ConvNet
+  channels: 19
+  window_size: 5
+  seq_len: 51
+  node_dim: 128
+  mlp_mode: conv_cls
+  mlp_hidden_features: 64
   class_num: 3
   device: *device
 
@@ -27,5 +27,7 @@ hyperparameters:
   lr: 0.0001
   epochs: 100
 
+task: freq
+
 save_dir: saved
-weights_file_name: Transformer.epochs_006.pth
+weights_file_name: ConvNet.epochs_015.pth
