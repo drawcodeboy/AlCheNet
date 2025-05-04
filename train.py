@@ -71,6 +71,8 @@ def main(cfg):
                                                      patience=7,
                                                      min_lr=1e-6)
     
+    task = cfg['task']
+    
     # Training loss
     total_train_loss = []
     total_start_time = int(time.time())
@@ -83,11 +85,11 @@ def main(cfg):
         
         # Training One Epoch
         start_time = int(time.time())
-        train_loss = train_one_epoch(model, train_dl, loss_fn, optimizer, scheduler, device)
+        train_loss = train_one_epoch(model, train_dl, loss_fn, optimizer, scheduler, task, device)
         elapsed_time = int(time.time() - start_time)
         print(f"Train Time: {elapsed_time//60:02d}m {elapsed_time%60:02d}s\n")
 
-        val_loss = validate(model, val_dl, loss_fn, scheduler, device) # input args
+        val_loss = validate(model, val_dl, loss_fn, scheduler, task, device) # input args
 
         if val_loss < min_loss:
             min_loss = val_loss

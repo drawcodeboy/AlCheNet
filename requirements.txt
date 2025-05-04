@@ -4,6 +4,7 @@ torch==2.5.0
 mne==1.9.0
 pandas==2.2.3
 einops==0.8.1
-transformers==4.51.3
 scikit-learn==1.6.1
 pyyaml==6.0.2
+torch_geometric==2.6.1
+fastdtw==0.3.4

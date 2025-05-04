@@ -5,14 +5,21 @@ import numpy as np
 
 from .metrics import get_metrics
 
-def train_one_epoch(model, dataloader, loss_fn, optimizer, scheduler, device):
+def train_one_epoch(model, dataloader, loss_fn, optimizer, scheduler, task, device):
     model.train()
     total_loss = []
     
     for batch_idx, (x, target) in enumerate(dataloader, start=1):
         optimizer.zero_grad()
         
-        x = x.to(device)
+        if task == 'freq':
+            x = x['freq']
+            x = x.to(device)
+        else:
+            x['freq'] = x['freq'].to(device)
+            x['edge_index'] = x['edge_index'].to(device)
+            x['edge_weight'] = x['edge_weight'].to(device)
+            
         target = target.to(device)
         
         logits = model(x)
@@ -30,12 +37,18 @@ def train_one_epoch(model, dataloader, loss_fn, optimizer, scheduler, device):
     return sum(total_loss)/len(total_loss)
 
 @torch.no_grad()
-def validate(model, dataloader, loss_fn, scheduler, device):
+def validate(model, dataloader, loss_fn, scheduler, task, device):
     model.eval()
     total_loss = []
     
     for batch_idx, (x, target) in enumerate(dataloader, start=1):
-        x = x.to(device)
+        if task == 'freq':
+            x = x['freq']
+            x = x.to(device)
+        else:
+            x['freq'] = x['freq'].to(device)
+            x['edge_index'] = x['edge_index'].to(device)
+            x['edge_weight'] = x['edge_weight'].to(device)
         target = target.to(device)
         
         logits = model(x)
@@ -51,13 +64,20 @@ def validate(model, dataloader, loss_fn, scheduler, device):
     return sum(total_loss)/len(total_loss)
 
 @torch.no_grad()
-def evaluate(model, dataloader, device):
+def evaluate(model, dataloader, task, device):
     model.eval()
     
     total_outputs = []
     total_targets = []
     
     for batch_idx, (x, target) in enumerate(dataloader, start=1):
+        if task == 'freq':
+            x = x['freq']
+            x = x.to(device)
+        else:
+            x['freq'] = x['freq'].to(device)
+            x['edge_index'] = x['edge_index'].to(device)
+            x['edge_weight'] = x['edge_weight'].to(device)
         x = x.to(device)
         target = target.to(device)
         

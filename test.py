@@ -41,8 +41,10 @@ def main(cfg):
                       map_location=device, weights_only=False)
     model.load_state_dict(ckpt['model'])
     
+    task = cfg['task']
+    
     start_time = int(time.time())
-    result = evaluate(model, test_dl, device)
+    result = evaluate(model, test_dl, task, device)
     test_time = int(time.time() - start_time)
     print(f"Test Time: {test_time//60:02d}m {test_time%60:02d}s")
     
