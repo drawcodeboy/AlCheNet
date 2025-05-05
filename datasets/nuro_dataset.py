@@ -53,20 +53,22 @@ class NuroDataset(Dataset):
         return len(self.data_li)
     
     def __getitem__(self, idx):
-        freq_path, adj_path, label = self.data_li[idx]
+        freq_path, sample_path, adj_path, label = self.data_li[idx]
         freq = np.load(freq_path).astype(np.float32)
+        sample = np.load(sample_path).astype(np.float32)
         adj = np.load(adj_path).astype(np.float32)
         adj = torch.tensor(adj, dtype=torch.float32)
         
         edge_index, edge_weight = dense_to_sparse(adj)
         
+        sample = torch.tensor(sample, dtype=torch.float32)
         freq = torch.tensor(freq, dtype=torch.float32)
         label = torch.tensor(label, dtype=torch.int64)
         
         x = {'freq': freq,
+             'sample': sample,
              'edge_index': edge_index,
              'edge_weight': edge_weight}
-        
         return x, label
         
     def _check(self):
@@ -84,12 +86,14 @@ class NuroDataset(Dataset):
                 if freq_path[:4] != "freq":
                     continue
                 adj_path = freq_path.replace('freq', 'adj')
+                sample_path = freq_path.replace('freq', 'sample')
                 freq_path = f"{participant_path}/{freq_path}"
                 adj_path = f"{participant_path}/{adj_path}"
+                sample_path = f"{participant_path}/{sample_path}"
                 label = self.metadata[self.metadata['participant_id'] == participant_id]['Group'].values.item()
                 label = self.label_map[label]
                 
-                self.data_li.append([freq_path, adj_path, label])
+                self.data_li.append([freq_path, sample_path, adj_path, label])
                 
     @classmethod
     def from_config(cls, cfg):
