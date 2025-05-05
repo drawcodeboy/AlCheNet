@@ -62,13 +62,13 @@ def main(cfg):
     # Optimizer
     optimizer = None
     if hp_cfg['optim'] == "AdamW":
-        optimizer = optim.AdamW(model.parameters(), lr=hp_cfg['lr'])
+        optimizer = optim.AdamW(model.parameters(), lr=hp_cfg['lr'], weight_decay=0.9)
     
     # Load Scheduler
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer,
                                                      mode='min',
                                                      factor=0.5,
-                                                     patience=7,
+                                                     patience=5,
                                                      min_lr=1e-6)
     
     task = cfg['task']

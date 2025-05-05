@@ -15,8 +15,12 @@ def train_one_epoch(model, dataloader, loss_fn, optimizer, scheduler, task, devi
         if task == 'freq':
             x = x['freq']
             x = x.to(device)
+        elif task == 'sample':
+            x = x['sample']
+            x = x.to(device)
         else:
             x['freq'] = x['freq'].to(device)
+            x['sample'] = x['sample'].to(device)
             x['edge_index'] = x['edge_index'].to(device)
             x['edge_weight'] = x['edge_weight'].to(device)
             
@@ -24,6 +28,7 @@ def train_one_epoch(model, dataloader, loss_fn, optimizer, scheduler, task, devi
         
         logits = model(x)
         # print(logits.shape, target.shape)
+        
         loss = loss_fn(logits, target)
         
         total_loss.append(loss.item())
@@ -45,8 +50,12 @@ def validate(model, dataloader, loss_fn, scheduler, task, device):
         if task == 'freq':
             x = x['freq']
             x = x.to(device)
+        elif task == 'sample':
+            x = x['sample']
+            x = x.to(device)
         else:
             x['freq'] = x['freq'].to(device)
+            x['sample'] = x['sample'].to(device)
             x['edge_index'] = x['edge_index'].to(device)
             x['edge_weight'] = x['edge_weight'].to(device)
         target = target.to(device)
@@ -74,11 +83,14 @@ def evaluate(model, dataloader, task, device):
         if task == 'freq':
             x = x['freq']
             x = x.to(device)
+        elif task == 'sample':
+            x = x['sample']
+            x = x.to(device)
         else:
             x['freq'] = x['freq'].to(device)
+            x['sample'] = x['sample'].to(device)
             x['edge_index'] = x['edge_index'].to(device)
             x['edge_weight'] = x['edge_weight'].to(device)
-        x = x.to(device)
         target = target.to(device)
         
         logits = model(x)

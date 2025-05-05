@@ -5,101 +5,31 @@ import torch
 from torch import nn
 
 from models import load_model
+import yaml
 
 def main():
-    cfg = {
-        'name': 'Mamba',
-        'in_features': 19,
-        'd_model': 128,
-        'n_layer': 6,
-        'd_state': 16,
-        'expand': 2,
-        'dt_rank': 'auto',
-        'd_conv': 4,
-        'conv_bias': True,
-        'bias': False,
-        'out_dim': 128,
-        'device': 'cuda:2'
-    }
-    model = load_model(cfg).to(cfg['device'])
+    with open(f"configs/train/transformer.yaml") as f:
+        cfg = yaml.full_load(f)
+    
+    model_cfg = cfg['model']
+    model = load_model(model_cfg)
     
     p_sum = 0
-    for param in model.parameters():
-        p_sum += param.numel()
-    print(f"Mamba Parameters: {p_sum * 10e-7:.2f}M")
+    for name, p in model.named_parameters():
+        p_sum += p.numel()
+        print(f"{name:30s}--{p.numel()}")
+    print(f"Transformer: {p_sum}")
     
-    input_t = torch.randn(16, 500, 19).to(cfg['device'])
-    output_t = model(input_t)
-    print(f"Output Shape: {output_t.shape}")
+    with open(f"configs/train/graphnet.yaml") as f:
+        cfg = yaml.full_load(f)
     
-    cfg = {
-        'name': 'Transformer',
-        'in_features': 19,
-        'd_model': 128,
-        'n_layer': 6,
-        'attn_heads': 1,
-        'out_dim': 128,
-        'device': 'cuda:2'
-    }
-    model = load_model(cfg).to(cfg['device'])
+    model_cfg = cfg['model']
+    model = load_model(model_cfg)
     
     p_sum = 0
-    for param in model.parameters():
-        p_sum += param.numel()
-    print(f"Transformer Parameters: {p_sum * 10e-7:.2f}M")
-    
-    input_t = torch.randn(16, 500, 19).to(cfg['device'])
-    output_t = model(input_t)
-    print(f"Output Shape: {output_t.shape}")
-    
-    cfg = {
-        'name': 'MambaClassifier',
-        'in_features': 19,
-        'd_model': 128,
-        'n_layer': 6,
-        'd_state': 16,
-        'expand': 2,
-        'dt_rank': 'auto',
-        'd_conv': 4,
-        'conv_bias': True,
-        'bias': False,
-        'out_dim': 128,
-        'mid_features': 50,
-        'class_num': 3,
-        'device': 'cuda:2'
-    }
-    model = load_model(cfg).to(cfg['device'])
-    
-    p_sum = 0
-    for param in model.parameters():
-        p_sum += param.numel()
-    print(f"Mamba Classifier Parameters: {p_sum * 10e-7:.2f}M")
-    
-    input_t = torch.randn(16, 500, 19).to(cfg['device'])
-    output_t = model(input_t)
-    print(f"Output Shape: {output_t.shape}")
-    
-    cfg = {
-        'name': 'TransformerClassifier',
-        'in_features': 19,
-        'd_model': 128,
-        'n_layer': 6,
-        'attn_heads': 1,
-        'out_dim': 128,
-        'mid_features': 50,
-        'class_num': 3,
-        'device': 'cuda:2'
-    }
-    model = load_model(cfg).to(cfg['device'])
-    
-    p_sum = 0
-    for param in model.parameters():
-        p_sum += param.numel()
-    print(f"Transformer Classifier Parameters: {p_sum * 10e-7:.2f}M")
-    
-    input_t = torch.randn(16, 500, 19).to(cfg['device'])
-    output_t = model(input_t)
-    print(f"Output Shape: {output_t.shape}")
+    for p in model.parameters():
+        p_sum += p.numel()
+    print(f"GraphNet: {p_sum}")
     
 if __name__ == '__main__':
     main()
