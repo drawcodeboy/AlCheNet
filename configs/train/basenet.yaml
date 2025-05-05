@@ -1,4 +1,4 @@
-expr: Train ConvNet
+expr: Train BaseNet
 
 device: &device cuda:2
 
@@ -15,14 +15,14 @@ val_data:
   mode: val
 
 model:
-  name: ConvNet
-  channels: 19
-  window_size: 5
-  seq_len: 51
-  node_dim: 128
-  mlp_mode: conv_cls
-  mlp_hidden_features: 64
-  class_num: 3
+  name: BaseNet
+  enc_channels: 19
+  enc_window_size: 3
+  enc_seq_len: 51
+  enc_node_dim: 256
+  mlp_in_features: 256
+  mlp_hidden_features: 512
+  mlp_class_num: 3
 
 hyperparameters:
   batch_size: 16
@@ -33,5 +33,5 @@ hyperparameters:
 
 task: freq
 
-save_name: ConvNet
+save_name: BaseNet
 save_dir: saved

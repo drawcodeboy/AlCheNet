@@ -1,0 +1,28 @@
+expr: Test Transformer
+
+device: &device cuda:1
+
+parallel: False
+
+data:
+  name: Nuro
+  root: data/open-nuro-dataset/dataset
+  mode: test
+
+model:
+  name: BaseNet
+  enc_channels: 19
+  enc_window_size: 3
+  enc_seq_len: 51
+  enc_node_dim: 256
+  mlp_in_features: 256
+  mlp_hidden_features: 512
+  mlp_class_num: 3
+
+hyperparameters:
+  batch_size: 16
+
+task: freq
+
+save_dir: saved
+weights_file_name: BaseNet.epochs_022.pth

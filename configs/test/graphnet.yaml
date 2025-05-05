@@ -1,18 +1,13 @@
-expr: Train GraphNet
+expr: Test GraphNet
 
-device: &device cuda:2
+device: &device cuda:1
 
 parallel: False
 
-train_data:
+data:
   name: Nuro
   root: data/open-nuro-dataset/dataset
-  mode: train
-
-val_data:
-  name: Nuro
-  root: data/open-nuro-dataset/dataset
-  mode: val
+  mode: test
 
 model:
   name: GraphNet
@@ -29,12 +24,8 @@ model:
 
 hyperparameters:
   batch_size: 16
-  loss_fn: cross-entropy
-  optim: AdamW
-  lr: 0.0001
-  epochs: 100
 
 task: graph
 
-save_name: GraphNet
 save_dir: saved
+weights_file_name: GraphNet.epochs_018.pth
