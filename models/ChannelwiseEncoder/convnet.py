@@ -2,10 +2,8 @@ import torch
 from torch import nn
 from einops import rearrange
 
-# from ..mlp import MLP
-import os, sys
-sys.path.append(os.getcwd())
-from models.mlp import MLP
+from ..mlp import MLP
+from .convblock import ConvBlock
 
 class ConvNet(nn.Module):
     def __init__(self,
@@ -20,12 +18,12 @@ class ConvNet(nn.Module):
         
         # Depthwise Convolution
         # Feature Extraction each waves
-        self.conv1 = nn.Conv2d(in_channels=channels,
-                               out_channels=8*channels,
-                               kernel_size=(1, window_size),
-                               groups=channels,
-                               padding=(0, window_size//2))
-        self.norm1 = nn.BatchNorm2d(num_features=8*channels)
+        
+        self.conv_block_li = nn.ModuleList([
+            ConvBlock(channels, 8*channels, 1, 2, 5),
+            ConvBlock(8*channels, 8*channels, 1, 2, 5),
+            ConvBlock(8*channels, 8*channels, 1, 2, 5)
+        ])
         
         # Integrate Waves
         self.conv2 = nn.Conv2d(in_channels=8*channels,
@@ -49,9 +47,12 @@ class ConvNet(nn.Module):
                            class_num=class_num)
         
     def forward(self, x):
-        x = self.conv1(x)
-        x = self.norm1(x)
-        x = self.relu(x)
+        x = self.conv_block_li[0](x)
+        for i in range(1, len(self.conv_block_li)):
+            identity = x
+            x = self.conv_block_li[i](x)
+            x = x + identity
+
         
         x = self.conv2(x)
         x = rearrange(x, 'b c 1 l -> b c l')
