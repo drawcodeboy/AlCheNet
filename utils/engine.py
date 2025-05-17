@@ -96,7 +96,7 @@ def evaluate(model, dataloader, task, device):
         logits = model(x)
         out = F.softmax(logits, dim=1)
         out = torch.argmax(out, dim=1)
-        
+
         total_outputs.extend(out.tolist())
         total_targets.extend(target.tolist())
         
