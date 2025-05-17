@@ -37,8 +37,8 @@ Accuracy: 0.4645
 F1-Score(Macro): 0.4371
 Precision(Macro): 0.4383
 Recall(Macro): 0.4457
-(.venv) root@9199914e73eb:/home# python test.py --config=graphnet
-=====================[Test GraphNet]=====================
+(.venv) root@9199914e73eb:/home# python test.py --config=gcnet
+=====================[Test GCNet]=====================
 device: cuda:1
 Load Dataset Nuro
 Evaluate: 100.00%
@@ -47,4 +47,34 @@ Accuracy: 0.5570
 F1-Score(Macro): 0.5263
 Precision(Macro): 0.5229
 Recall(Macro): 0.5341
+(.venv) root@9199914e73eb:/home# python test.py --config=chebnet
+=====================[Test ChebNet]=====================
+device: cuda:1
+Load Dataset Nuro
+Evaluate: 100.00%
+Test Time: 00m 02s
+Accuracy: 0.5581
+F1-Score(Macro): 0.5409
+Precision(Macro): 0.5728
+Recall(Macro): 0.5513
+(.venv) root@9199914e73eb:/home# python test.py --config=gsnet
+=====================[Test GSNet]=====================
+device: cuda:1
+Load Dataset Nuro
+Evaluate: 100.00%
+Test Time: 00m 02s
+Accuracy: 0.4613
+F1-Score(Macro): 0.4496
+Precision(Macro): 0.4544
+Recall(Macro): 0.4461
+(.venv) root@9199914e73eb:/home# python test.py --config=gatnet 
+=====================[Test GATNet]=====================
+device: cuda:1
+Load Dataset Nuro
+Evaluate: 100.00%
+Test Time: 00m 02s
+Accuracy: 0.4753
+F1-Score(Macro): 0.4413
+Precision(Macro): 0.4438
+Recall(Macro): 0.4555
 ```

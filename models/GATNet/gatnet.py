@@ -3,7 +3,7 @@ from torch import nn
 from ..ChannelwiseEncoder.convnet import ConvNet
 from .graphblock import GraphBlock
 
-class GraphNet(nn.Module):
+class GATNet(nn.Module):
     def __init__(self,
                  enc_channels:int,
                  enc_window_size:int,

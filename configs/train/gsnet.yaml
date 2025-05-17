@@ -1,0 +1,40 @@
+expr: Train GSNet
+
+device: &device cuda:2
+
+parallel: False
+
+train_data:
+  name: Nuro
+  root: data/open-nuro-dataset/dataset
+  mode: train
+
+val_data:
+  name: Nuro
+  root: data/open-nuro-dataset/dataset
+  mode: val
+
+model:
+  name: GSNet
+  enc_channels: 19
+  enc_window_size: 3
+  enc_seq_len: 51
+  enc_node_dim: 256
+  in_channels: 256
+  hidden_channels: 256
+  out_channels: 256
+  n_layer: 6
+  mlp_hidden_features: 512
+  mlp_class_num: 3
+
+hyperparameters:
+  batch_size: 16
+  loss_fn: cross-entropy
+  optim: AdamW
+  lr: 0.0001
+  epochs: 100
+
+task: graph
+
+save_name: GSNet
+save_dir: saved

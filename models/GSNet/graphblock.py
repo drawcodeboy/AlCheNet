@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from torch_geometric.nn import GCN, TopKPooling, global_mean_pool
+from torch_geometric.nn import SAGEConv, TopKPooling, global_mean_pool
 from torch_geometric.data import Data, Batch
 
 from ..mlp import MLP
@@ -15,11 +15,15 @@ class GraphBlock(nn.Module):
                  mlp_class_num:int):
         super().__init__()
         
-        self.gcn = GCN(in_channels=in_channels,
-                       hidden_channels=hidden_channels,
-                       out_channels=out_channels,
-                       num_layers=n_layer,
-                       act='relu')
+        self.act_fn = nn.ReLU()
+        self.sage_layers = nn.ModuleList([])
+        self.sage_layers.append(SAGEConv(in_channels=in_channels,
+                                         out_channels=hidden_channels))
+        for layer in range(n_layer-2):
+            self.sage_layers.append(SAGEConv(in_channels=hidden_channels,
+                                             out_channels=hidden_channels))
+        self.sage_layers.append(SAGEConv(in_channels=hidden_channels,
+                                         out_channels=out_channels))
         
         self.pool = TopKPooling(in_channels=out_channels)
         
@@ -30,9 +34,13 @@ class GraphBlock(nn.Module):
     def forward(self, x):
         batch = self.create_batch_graph(x)
         
-        # GCN need not batch.batch, because it treats big graph.
-        x = self.gcn(batch.x, batch.edge_index, edge_weight=batch.edge_weight)
-        
+        for idx, layer in enumerate(self.sage_layers):
+            x = layer(batch.x, batch.edge_index)
+            if idx != (len(self.sage_layers)-1):
+                x = self.act_fn(x)
+            batch.x = x
+                
+
         x, edge_index, edge_weight, batch_batch, _, _ = self.pool(
             x, batch.edge_index, edge_attr=batch.edge_weight, batch=batch.batch
         )
