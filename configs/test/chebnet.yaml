@@ -18,6 +18,7 @@ model:
   in_channels: 256
   hidden_channels: 256
   out_channels: 256
+  k: 2
   n_layer: 6
   mlp_hidden_features: 512
   mlp_class_num: 3
@@ -28,4 +29,4 @@ hyperparameters:
 task: graph
 
 save_dir: saved
-weights_file_name: ChebNet.epochs_018.pth
+weights_file_name: ChebNet.epochs_027.pth

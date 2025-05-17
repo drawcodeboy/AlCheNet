@@ -17,16 +17,15 @@ unzip data/open-nuro-dataset.zip -d data/open-nuro-dataset
 ```
 # Result
 ```
-(.venv) root@9199914e73eb:/home# python test.py --config=basenet
-=====================[Test Transformer]=====================
+=====================[Test Channel-wise encoder]=====================
 device: cuda:1
 Load Dataset Nuro
 Evaluate: 100.00%
 Test Time: 00m 01s
-Accuracy: 0.5183
-F1-Score(Macro): 0.4528
-Precision(Macro): 0.4518
-Recall(Macro): 0.4869
+Accuracy: 0.4882
+F1-Score(Macro): 0.4613
+Precision(Macro): 0.4609
+Recall(Macro): 0.4677
 (.venv) root@9199914e73eb:/home# python test.py --config=transformer
 =====================[Test Transformer]=====================
 device: cuda:1
@@ -53,10 +52,10 @@ device: cuda:1
 Load Dataset Nuro
 Evaluate: 100.00%
 Test Time: 00m 02s
-Accuracy: 0.5581
-F1-Score(Macro): 0.5409
-Precision(Macro): 0.5728
-Recall(Macro): 0.5513
+Accuracy: 0.5871
+F1-Score(Macro): 0.5724
+Precision(Macro): 0.5799
+Recall(Macro): 0.5735
 (.venv) root@9199914e73eb:/home# python test.py --config=gsnet
 =====================[Test GSNet]=====================
 device: cuda:1

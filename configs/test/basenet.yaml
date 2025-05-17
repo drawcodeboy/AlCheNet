@@ -1,4 +1,4 @@
-expr: Test Transformer
+expr: Test Channel-wise encoder
 
 device: &device cuda:1
 
@@ -25,4 +25,4 @@ hyperparameters:
 task: freq
 
 save_dir: saved
-weights_file_name: BaseNet.epochs_022.pth
+weights_file_name: BaseNet.epochs_040.pth

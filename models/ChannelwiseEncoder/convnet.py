@@ -18,20 +18,21 @@ class ConvNet(nn.Module):
         
         # Depthwise Convolution
         # Feature Extraction each waves
+        self.factor = 8
         
         self.conv_block_li = nn.ModuleList([
-            ConvBlock(channels, 8*channels, 1, 2, 5),
-            ConvBlock(8*channels, 8*channels, 1, 2, 5),
-            ConvBlock(8*channels, 8*channels, 1, 2, 5)
+            ConvBlock(channels, self.factor*channels, 1, 2, 5),
+            ConvBlock(self.factor*channels, self.factor*channels, 1, 2, 5),
+            ConvBlock(self.factor*channels, self.factor*channels, 1, 2, 5)
         ])
         
         # Integrate Waves
-        self.conv2 = nn.Conv2d(in_channels=8*channels,
-                               out_channels=16*channels,
+        self.conv2 = nn.Conv2d(in_channels=self.factor*channels,
+                               out_channels=self.factor*2*channels,
                                kernel_size=(5, window_size),
                                groups=channels,
                                padding=(0, window_size//2))
-        self.norm2 = nn.BatchNorm1d(num_features=16*channels)
+        self.norm2 = nn.BatchNorm1d(num_features=self.factor*2*channels)
         
         self.li = nn.Linear(in_features=seq_len,
                             out_features=node_dim)
@@ -60,7 +61,7 @@ class ConvNet(nn.Module):
         x = self.relu(x)
         
         B, C, L = x.size()
-        x = x.view(B, 16, 19, L)
+        x = x.view(B, self.factor*2, 19, L)
         x = x.mean(dim=1)
         
         x = self.li(x)

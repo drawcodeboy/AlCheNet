@@ -12,6 +12,7 @@ class ChebNet(nn.Module):
                  in_channels:int,
                  hidden_channels:int,
                  out_channels:int,
+                 k:int,
                  n_layer:int,
                  mlp_hidden_features:int,
                  mlp_class_num:int):
@@ -26,6 +27,7 @@ class ChebNet(nn.Module):
         self.graphblock = GraphBlock(in_channels=in_channels,
                                      hidden_channels=hidden_channels,
                                      out_channels=out_channels,
+                                     k=k,
                                      n_layer=n_layer,
                                      mlp_hidden_features=mlp_hidden_features,
                                      mlp_class_num=mlp_class_num)
@@ -46,6 +48,7 @@ class ChebNet(nn.Module):
                    in_channels=cfg['in_channels'],
                    hidden_channels=cfg['hidden_channels'],
                    out_channels=cfg['out_channels'],
+                   k=cfg['k'],
                    n_layer=cfg['n_layer'],
                    mlp_hidden_features=cfg['mlp_hidden_features'],
                    mlp_class_num=cfg['mlp_class_num'])

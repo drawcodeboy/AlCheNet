@@ -10,23 +10,25 @@ class GraphBlock(nn.Module):
                  in_channels:int,
                  hidden_channels:int,
                  out_channels:int,
+                 k:int,
                  n_layer:int,
                  mlp_hidden_features:int,
                  mlp_class_num:int):
         super().__init__()
         
+        self.k = k
         self.act_fn = nn.ReLU()
         self.cheb_layers = nn.ModuleList([])
         self.cheb_layers.append(ChebConv(in_channels=in_channels,
                                          out_channels=hidden_channels,
-                                         K=2))
+                                         K=self.k))
         for layer in range(n_layer-2):
             self.cheb_layers.append(ChebConv(in_channels=hidden_channels,
                                              out_channels=hidden_channels,
-                                             K=2))
+                                             K=self.k))
         self.cheb_layers.append(ChebConv(in_channels=hidden_channels,
                                          out_channels=out_channels,
-                                         K=2))
+                                         K=self.k))
         
         self.pool = TopKPooling(in_channels=out_channels)
         

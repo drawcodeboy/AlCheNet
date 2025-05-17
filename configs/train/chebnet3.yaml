@@ -1,4 +1,4 @@
-expr: Train ChebNet
+expr: Train ChebNet3
 
 device: &device cuda:2
 
@@ -23,7 +23,7 @@ model:
   in_channels: 256
   hidden_channels: 256
   out_channels: 256
-  k: 2
+  k: 3
   n_layer: 6
   mlp_hidden_features: 512
   mlp_class_num: 3
@@ -37,5 +37,5 @@ hyperparameters:
 
 task: graph
 
-save_name: ChebNet
+save_name: ChebNet3
 save_dir: saved

@@ -50,7 +50,21 @@ def main(cfg):
     
     for key, value in result.items():
         print(f"{key}: {value:.4f}")
-
+    
+    # For latex
+    key_li = []
+    value_li = []
+    for key, value in result.items():
+        key_li.append(key)
+        value_li.append(value)
+    
+    for key in key_li:
+        print(key, end=" ")
+    print()
+    for value in value_li:
+        print(f"{value*100:.2f} &", end=" ")
+    print()
+    
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('Test', parents=[add_args_parser()])
     args = parser.parse_args()
