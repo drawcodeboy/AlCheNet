@@ -95,8 +95,8 @@ def main(cfg):
             min_loss = val_loss
             save_model_ckpt(model, cfg['save_name'], current_epoch, cfg['save_dir'])
 
-        total_train_loss.append(train_loss)
-        save_loss_ckpt(cfg['save_name'], total_train_loss, cfg['save_dir'])
+        # total_train_loss.append(train_loss)
+        # save_loss_ckpt(cfg['save_name'], total_train_loss, cfg['save_dir'])
 
     total_elapsed_time = int(time.time()) - total_start_time
     print(f"<Total Train Time: {total_elapsed_time//60:02d}m {total_elapsed_time%60:02d}s>")

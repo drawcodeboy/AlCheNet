@@ -29,4 +29,4 @@ hyperparameters:
 task: graph
 
 save_dir: saved
-weights_file_name: ChebNet3.epochs_020.pth
+weights_file_name: ChebNet3.epochs_022.pth
