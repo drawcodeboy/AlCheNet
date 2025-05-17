@@ -1,16 +1,21 @@
-expr: Test GraphNet
+expr: Train GCNet
 
-device: &device cuda:1
+device: &device cuda:2
 
 parallel: False
 
-data:
+train_data:
   name: Nuro
   root: data/open-nuro-dataset/dataset
-  mode: test
+  mode: train
+
+val_data:
+  name: Nuro
+  root: data/open-nuro-dataset/dataset
+  mode: val
 
 model:
-  name: GraphNet
+  name: GCNet
   enc_channels: 19
   enc_window_size: 3
   enc_seq_len: 51
@@ -24,8 +29,12 @@ model:
 
 hyperparameters:
   batch_size: 16
+  loss_fn: cross-entropy
+  optim: AdamW
+  lr: 0.0001
+  epochs: 100
 
 task: graph
 
+save_name: GCNet
 save_dir: saved
-weights_file_name: GraphNet.epochs_018.pth
