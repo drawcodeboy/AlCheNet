@@ -48,8 +48,7 @@ def main(cfg):
     test_time = int(time.time() - start_time)
     print(f"Test Time: {test_time//60:02d}m {test_time%60:02d}s")
     
-    for key, value in result.items():
-        print(f"{key}: {value:.4f}")
+    print("=====Latex Format=====")
     
     # For latex
     key_li = []

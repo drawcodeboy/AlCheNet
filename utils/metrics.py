@@ -103,7 +103,6 @@ def get_metrics(outputs, targets, class_num:int=10):
     for k, v in macro.items():
         print(f"{k}: {v:.4f}")
         
-    print("Accuracy")
-    print(f"Acc: {accuracy:.4f}")
+    print(f"accuracy: {accuracy:.4f}")
     
     return results
