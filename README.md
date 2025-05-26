@@ -1,6 +1,11 @@
 # Introduction
-* AlCheNet = Alzheimer's disease + Channel-wise encoder + ChebNet
-# Install
+* AlCheNet = Alzheimer's disease + Pathology-informed Graph + Channel-wise encoder + ChebNet
+
+![tomo1](assets/tomomap_1.jpg) | ![tomo2](assets/tomomap_2.jpg)
+--- | --- |
+
+# Setup
+## Ubuntu setup
 ```
 # Container setup
 docker pull ubuntu:22.04
@@ -23,7 +28,19 @@ sudo apt-get install python3
 sudo apt-get install python3-venv
 source .venv/bin/activate
 pip install -r requirements.txt
+```
+## Windows setup
+```
+# Clone
+git clone https://github.com/drawcodeboy/AlCheNet.git .
+python -m venv .venv
 
+# Python environment
+.venv\Scripts activate
+pip install -r requirments.txt
+```
+## Related-project
+```
 # Data processing (Adjacency matrix(DTW), Nodes(Channel features))
 python datasets/data2np.py
 
