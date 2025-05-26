@@ -59,6 +59,9 @@ class NuroDataset(Dataset):
         adj = np.load(adj_path).astype(np.float32)
         adj = torch.tensor(adj, dtype=torch.float32)
         
+        # 여기서 adj를 끊어주고, dense_to_parse로 보내주고,
+        # 디버깅은 dense_to_sparse으로 확인해야 할 듯
+        
         edge_index, edge_weight = dense_to_sparse(adj)
         
         sample = torch.tensor(sample, dtype=torch.float32)
