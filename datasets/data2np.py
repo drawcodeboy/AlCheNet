@@ -83,21 +83,14 @@ def main():
             freq = np.stack(tuple(channels_li), axis=0)
             np.save(f"{save_sample_path}/freq_{index:04d}.npy", freq)
             
-            # np.save(f"{save_sample_path}/sample_{index:04d}.npy", sample)
+            np.save(f"{save_sample_path}/sample_{index:04d}.npy", sample)
                 
             # Adjacency Matrix for Graph Network (DTW)
-            # adj = parallel_dtw(sample) # Multi-Processing
-            '''
-            adj = np.zeros((sample.shape[0], sample.shape[0]))
-            for i in range(sample.shape[0]):
-                for j in range(i + 1, sample.shape[0]):
-                    dist, _ = fastdtw(sample[i], sample[j])
-                    adj[i, j] = dist
-                    adj[j, i] = dist
-            '''
-            # sigma = np.std(adj)
-            # adj = np.exp(-(adj ** 2)/(2 * sigma ** 2))
-            # np.save(f"{save_sample_path}/adj_{index:04d}.npy", adj)
+            adj = parallel_dtw(sample) # Multi-Processing
+
+            sigma = np.std(adj)
+            adj = np.exp(-(adj ** 2)/(2 * sigma ** 2))
+            np.save(f"{save_sample_path}/adj_{index:04d}.npy", adj)
             
         print(f"\rData Processing... ({idx/len(participants_li)*100:.2f}%)", end='')
     print()

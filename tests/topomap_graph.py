@@ -77,7 +77,7 @@ fig, ax = plt.subplots(figsize=(6, 6))
 # 채널 점과 값 그리기
 for ch, (x, y) in channel_pos.items():
     value = channel_values.get(ch, 0.5)  # default 0.5 if missing
-    ax.scatter(x, y, s=1000, zorder=3, c='darkslateblue')
+    ax.scatter(x, y, s=1000, zorder=3, c='dimgray')
     ax.text(x, y, ch, fontsize=15, ha='center', va='center', zorder=4, color='white')
 
 # 엣지 그리기
@@ -85,7 +85,7 @@ for ch1, ch2 in edges:
     print(ch1, ch2)
     x1, y1 = channel_pos[ch1]
     x2, y2 = channel_pos[ch2]
-    ax.plot([x1, x2], [y1, y2], 'dimgray', linewidth=2, zorder=2)
+    ax.plot([x1, x2], [y1, y2], 'darkgrey', linewidth=2, zorder=2)
 
 # 배경 원 그리기 (두피)
 circle = plt.Circle((0, 0), 1.3, color='black', fill=False, linewidth=2, zorder=1)
@@ -119,5 +119,6 @@ LIMIT = 1.6
 ax.set_xlim(-LIMIT, LIMIT)
 ax.set_ylim(-LIMIT, LIMIT)
 ax.axis('off')
-# plt.title('Brain Topomap with Edges')
+plt.title('Typical apporach', size=20)
+plt.savefig('./assets/tomomap_1.jpg', dpi=500)
 plt.show()

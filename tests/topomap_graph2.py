@@ -117,5 +117,6 @@ LIMIT = 1.6
 ax.set_xlim(-LIMIT, LIMIT)
 ax.set_ylim(-LIMIT, LIMIT)
 ax.axis('off')
-# plt.title('Brain Topomap with Edges')
+plt.title('Ours', size=20)
+plt.savefig('./assets/tomomap_2.jpg', dpi=500)
 plt.show()
