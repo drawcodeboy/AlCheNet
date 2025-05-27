@@ -1,0 +1,47 @@
+expr: Train AlCheNet
+
+device: &device cuda:1
+
+parallel: False
+
+train_data:
+  name: Nuro
+  root: data/open-nuro-dataset/dataset
+  mode: train
+  pathology_graph: True
+  parcellation: &parcellation ALL
+  edge_w: 0.5
+
+val_data:
+  name: Nuro
+  root: data/open-nuro-dataset/dataset
+  mode: val
+  pathology_graph: True
+  parcellation: *parcellation
+  edge_w: 0.5
+
+model:
+  name: ChebNet
+  enc_channels: 19
+  enc_window_size: 3
+  enc_seq_len: 51
+  enc_node_dim: 256
+  in_channels: 256
+  hidden_channels: 256
+  out_channels: 256
+  k: 3
+  n_layer: 6
+  mlp_hidden_features: 512
+  mlp_class_num: 3
+
+hyperparameters:
+  batch_size: 16
+  loss_fn: cross-entropy
+  optim: AdamW
+  lr: 0.0001
+  epochs: 100
+
+task: graph
+
+save_name: AlCheNet_w1
+save_dir: saved

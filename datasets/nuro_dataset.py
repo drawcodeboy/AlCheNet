@@ -7,6 +7,7 @@ from einops import rearrange
 from scipy.signal import welch
 from torch_geometric.utils import dense_to_sparse
 from .eeg_func.band_decom import decompose_eeg_waves
+from itertools import combinations
 
 import os, sys
 import time
@@ -19,7 +20,10 @@ class NuroDataset(Dataset):
     '''
     def __init__(self,
                  root:str="data/open-nuro-dataset/dataset",
-                 mode:str='train'):
+                 mode:str='train',
+                 pathology_graph:bool=True,
+                 parcellation:str='LR',
+                 edge_w:float=0.5):
         super().__init__()
         
         self.root = root
@@ -37,6 +41,10 @@ class NuroDataset(Dataset):
         self.test_li = [33, 34, 35, 36, 62, 63, 64, 65, 85, 86, 87, 88] # Each class, 4 Participants
         self.test_li = list(map(lambda x: f"sub-{x:03d}", self.test_li))
         
+        self.pathology_graph = pathology_graph
+        self.parcellation = parcellation
+        self.w_adj = torch.ones((19, 19)) * 0.5
+        self._build_w_adj()
         self._check()
         
         random.seed(42)
@@ -59,8 +67,8 @@ class NuroDataset(Dataset):
         adj = np.load(adj_path).astype(np.float32)
         adj = torch.tensor(adj, dtype=torch.float32)
         
-        # 여기서 adj를 끊어주고, dense_to_parse로 보내주고,
-        # 디버깅은 dense_to_sparse으로 확인해야 할 듯
+        if self.pathology_graph == True:
+            adj = adj * self.w_adj
         
         edge_index, edge_weight = dense_to_sparse(adj)
         
@@ -73,6 +81,27 @@ class NuroDataset(Dataset):
              'edge_index': edge_index,
              'edge_weight': edge_weight}
         return x, label
+    
+    def _build_w_adj(self):
+        channels_str = ["Fp1", "Fp2", "F3", "F4", "C3", "C4", "P3", "P4", "O1", "O2", "F7", 
+                        "F8", "T3", "T4", "T5", "T6", "Fz", "Cz", "Pz"]
+        
+        channels_li = []
+        if self.parcellation == 'ALL':
+            channels_li.append(list(combinations([0, 1, 2, 3, 10, 11, 16], 2)))
+            channels_li.append(list(combinations([4, 5, 17], 2)))
+            channels_li.append(list(combinations([6, 7, 18], 2)))
+            channels_li.append(list(combinations([12, 13, 14, 15], 2)))
+            channels_li.append(list(combinations([8, 9], 2)))
+        else:
+            raise Exception("Not Implemented Error")
+        
+        for channels in channels_li:
+            for comb in channels:
+                self.w_adj[comb[0], comb[1]] = 1.
+                # print(channels_str[comb[0]], channels_str[comb[1]])
+            # print("=====")
+        # print(self.w_adj)
         
     def _check(self):
         participants_li = self.metadata['participant_id'].tolist()
@@ -101,7 +130,10 @@ class NuroDataset(Dataset):
     @classmethod
     def from_config(cls, cfg):
         return cls(root=cfg['root'],
-                   mode=cfg['mode'])
+                   mode=cfg['mode'],
+                   pathology_graph=cfg.get('pathology_graph'),
+                   parcellation=cfg.get('parcellation'),
+                   edge_w=cfg.get('edge_w'))
 
 if __name__ == '__main__':
     train_ds = NuroDataset()

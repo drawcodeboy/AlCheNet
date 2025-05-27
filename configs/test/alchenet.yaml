@@ -1,0 +1,35 @@
+expr: Test AlCheNet
+
+device: &device cuda:1
+
+parallel: False
+
+data:
+  name: Nuro
+  root: data/open-nuro-dataset/dataset
+  mode: test
+  pathology_graph: True
+  parcellation: ALL
+  edge_w: 0.5
+
+model:
+  name: ChebNet
+  enc_channels: 19
+  enc_window_size: 3
+  enc_seq_len: 51
+  enc_node_dim: 256
+  in_channels: 256
+  hidden_channels: 256
+  out_channels: 256
+  k: 3
+  n_layer: 6
+  mlp_hidden_features: 512
+  mlp_class_num: 3
+
+hyperparameters:
+  batch_size: 16
+
+task: graph
+
+save_dir: saved
+weights_file_name: AlCheNet.epochs_023.pth
