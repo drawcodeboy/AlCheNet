@@ -54,6 +54,18 @@ channels = [
     'O2',
 ]
 
+# Plot
+fig, ax = plt.subplots(figsize=(6, 6))
+
+edges = list(combinations(channels, 2))
+
+# 엣지 그리기
+for ch1, ch2 in edges:
+    print(ch1, ch2)
+    x1, y1 = channel_pos[ch1]
+    x2, y2 = channel_pos[ch2]
+    ax.plot([x1, x2], [y1, y2], 'darkgrey', linewidth=2, zorder=2)
+
 channels_li = []
 channels_li.append(channels[:7])
 channels_li.append(channels[14:17])
@@ -66,9 +78,6 @@ for channels in channels_li:
     edges = list(combinations(channels, 2))
     edges_li.append(edges)
 
-# Plot
-fig, ax = plt.subplots(figsize=(6, 6))
-
 # 채널 점과 값 그리기
 colors_li = ['firebrick', 'chocolate', 'green', 'steelblue', 'slateblue']
 for idx, channels in enumerate(channels_li):
@@ -78,7 +87,7 @@ for idx, channels in enumerate(channels_li):
         ax.text(x, y, ch, fontsize=15, ha='center', va='center', zorder=4, color='white')
 
 # 엣지 그리기
-colors_li = ['lightcoral', 'lightsalmon', 'lightgreen', 'cornflowerblue', 'mediumpurple']
+colors_li = ['lightcoral', 'orange', 'limegreen', 'cornflowerblue', 'mediumpurple']
 for idx, edges in enumerate(edges_li, start=0):
     for ch1, ch2 in edges:
         x1, y1 = channel_pos[ch1]
@@ -119,4 +128,3 @@ ax.set_ylim(-LIMIT, LIMIT)
 ax.axis('off')
 plt.title('Ours', size=20)
 plt.savefig('./assets/tomomap_2.jpg', dpi=500)
-plt.show()
