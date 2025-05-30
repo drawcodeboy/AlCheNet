@@ -8,11 +8,13 @@ train_data:
   name: Nuro
   root: data/open-nuro-dataset/dataset
   mode: train
+  pathology_graph: False
 
 val_data:
   name: Nuro
   root: data/open-nuro-dataset/dataset
   mode: val
+  pathology_grapth: False
 
 model:
   name: BaseNet

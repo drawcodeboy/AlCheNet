@@ -93,8 +93,6 @@ class NuroDataset(Dataset):
             channels_li.append(list(combinations([6, 7, 18], 2)))
             channels_li.append(list(combinations([12, 13, 14, 15], 2)))
             channels_li.append(list(combinations([8, 9], 2)))
-        else:
-            raise Exception("Not Implemented Error")
         
         for channels in channels_li:
             for comb in channels:

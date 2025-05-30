@@ -48,12 +48,12 @@ class ConvNet(nn.Module):
                            class_num=class_num)
         
     def forward(self, x):
+        # x: (Batch size, Channels, Waves, Length)
         x = self.conv_block_li[0](x)
         for i in range(1, len(self.conv_block_li)):
             identity = x
             x = self.conv_block_li[i](x)
             x = x + identity
-
         
         x = self.conv2(x)
         x = rearrange(x, 'b c 1 l -> b c l')

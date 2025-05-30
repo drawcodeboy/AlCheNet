@@ -1,3 +1,7 @@
+# To do
+```
+프로젝트 마친 후에 config 실험 세팅에 필요한 args들 올려두기 (데이터셋 쪽)
+```
 # Introduction
 * AlCheNet = Alzheimer's disease + Pathology-informed Graph + Channel-wise encoder + ChebNet
 
