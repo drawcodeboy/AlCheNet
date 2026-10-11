@@ -14,7 +14,8 @@
   <a href="#-setup">Setup</a> ·
   <a href="#-dataset">Dataset</a> ·
   <a href="#-train--test">Train &amp; Test</a> ·
-  <a href="#-results">Results</a>
+  <a href="#-results">Results</a> ·
+  <a href="https://draw-code-boy.tistory.com/624">Project Retrospective</a>
 </p>
 
 ---
